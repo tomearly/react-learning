@@ -1,13 +1,26 @@
-import { useState } from "react"
-import data from "@/data/kanban.json"
+import { useState, useEffect } from "react"
+import sampleData from "@/data/kanban.json"
 import BoardPanel from "@/components/BoardPanel"
 import type { BoardState } from "@/types/BoardState"
 import type { AddTaskHandler } from "@/types/AddTaskHandler"
 
-function App() {
-  const board = data as BoardState
-  
-  const [boardData, setBoardData] = useState(board)
+const boardStorageKey = "kanban-board"
+
+function App() { 
+  const [boardData, setBoardData] = useState<BoardState>(() => {
+  const savedBoard = localStorage.getItem(boardStorageKey)
+
+  if (savedBoard) {
+    return JSON.parse(savedBoard)
+  }
+
+  return sampleData
+})
+
+
+  useEffect(() => {
+    localStorage.setItem(boardStorageKey, JSON.stringify(boardData))
+  }, [boardData])
 
   const addTask: AddTaskHandler = (columnId, taskTitle, taskText) => {
     setBoardData((currentBoardData) => ({

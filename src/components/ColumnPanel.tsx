@@ -56,7 +56,6 @@ function ColumnPanel({ columns, addTask }: ColumnPanelProps) {
             {showAddTaskFormDialog && 
                 <AddTaskFormDialog open={showAddTaskFormDialog}
                     onOpenChange={setShowAddTaskFormDialog}
-                    selectedColumnId={selectedColumnId}
                     selectedColumnTitle={selectedColumnTitle}
                     onAddTask={addTaskToSelectedColumn}
                 >

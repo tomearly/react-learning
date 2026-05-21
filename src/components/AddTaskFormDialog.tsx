@@ -20,11 +20,8 @@ import {
 import {
     Input
 } from "@/components/ui/input"
-import { AlertCircleIcon } from "lucide-react"
-import {
-    Alert,
-    AlertDescription,
-} from "@/components/ui/alert"
+
+import FormAlert from "@/components/base/FormAlert"
 
 import { stringLengthValidation } from "@/lib/utils"
 
@@ -44,21 +41,6 @@ function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask 
     const [taskText, setTaskText] = useState('');
 
     const [validationMessages, setValidationMessages] = useState<string[]>([])
-
-    const AlertDestructive = function () {
-        if(validationMessages.length > 0) {
-            return (
-                <Alert variant="destructive" className="max-w-md">
-                    <AlertCircleIcon />
-                    <AlertDescription>
-                        {(validationMessages.map((m: string) => (
-                            <p>{m}</p>
-                        )))}
-                    </AlertDescription>
-                </Alert>
-            )
-        }
-    }
 
     const handleSubmit = (event: SubmitEvent) => {
         event.preventDefault()
@@ -81,6 +63,8 @@ function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask 
             return;
         }
 
+        setValidationMessages([])
+
         onAddTask(taskTitle, taskText)
         onOpenChange(false)
     }
@@ -101,7 +85,7 @@ function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask 
                             <Label htmlFor="text-1">Text</Label>
                             <Input id="text-1" name="text" onChange={(e) => setTaskText(e.target.value)} />
                         </Field>
-                        <AlertDestructive></AlertDestructive>
+                        <FormAlert validationMessages={validationMessages}/>
                     </FieldGroup>
                     <DialogFooter>
                         <Button type="submit">Add Task</Button>
