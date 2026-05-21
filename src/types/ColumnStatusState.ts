@@ -1,0 +1,1 @@
+export type ColumnStatus = 'TODO' | 'DOING' | 'DONE';

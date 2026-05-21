@@ -1,0 +1,69 @@
+{
+    "id": "board_1",
+    "title": "Tom's Board",
+    "columns": [
+        {
+            "id": "column_1",
+            "position": 0,
+            "title": "TODO",
+            "tasks": [
+                {
+                    "id": "column_1_2",
+                    "position": 0,
+                    "title": "Clean litter tray",
+                    "text": "Clean up the litter tray and put new water out",
+                    "status": "TODO"
+                },
+                {
+                    "id": "task_1",
+                    "position": 1,
+                    "title": "Feed the cat",
+                    "text": "Give the cat some kibble",
+                    "status": "TODO"
+                }
+            ]
+        },
+        {
+            "id": "column_2",
+            "position": 2,
+            "title": "DONE",
+            "tasks": [
+                {
+                    "id": "column_3_1",
+                    "position": 1,
+                    "title": "Clean litter tray",
+                    "text": "Clean up the litter tray and put new water out",
+                    "status": "DOING"
+                },
+                {
+                    "id": "column_3_0",
+                    "position": 0,
+                    "title": "Feed the cat",
+                    "text": "Give the cat some kibble",
+                    "status": "DOING"
+                }
+            ]
+        },
+        {
+            "id": "column_3",
+            "position": 1,
+            "title": "IN PROGRESS",
+            "tasks": [
+                {
+                    "id": "column_3_1",
+                    "position": 1,
+                    "title": "Clean litter tray",
+                    "text": "Clean up the litter tray and put new water out",
+                    "status": "DOING"
+                },
+                {
+                    "id": "column_3_0",
+                    "position": 0,
+                    "title": "Feed the cat",
+                    "text": "Give the cat some kibble",
+                    "status": "DOING"
+                }
+            ]
+        }
+    ]
+}

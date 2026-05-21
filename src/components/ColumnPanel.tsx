@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import type { Column } from '@/types/Column'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import TaskCard from '@/components/TaskCard'
 import { Button } from './ui/button';
+import TaskCard from '@/components/TaskCard'
 import AddTaskFormDialog from './AddTaskFormDialog';
 
+import type { AddTaskHandler } from '@/types/AddTaskHandler';
+import type { Column } from '@/types/ColumnState'
+
 type ColumnPanelProps = {
-    columns: Column[]
+    columns: Column[],
+    addTask: AddTaskHandler,
 }
 
-function ColumnPanel({ columns }: ColumnPanelProps) {
+function ColumnPanel({ columns, addTask }: ColumnPanelProps) {
 
     const [showAddTaskFormDialog, setShowAddTaskFormDialog] = useState(false);
     const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null)
@@ -21,12 +24,20 @@ function ColumnPanel({ columns }: ColumnPanelProps) {
         setSelectedColumnTitle(column.title)
     }
 
+    const addTaskToSelectedColumn = function(taskTitle: string, taskText: string) {
+        if (selectedColumnId === null) {
+            throw new Error("Cannot add task because no column is selected.")
+        }
+
+        addTask(selectedColumnId, taskTitle, taskText)
+    }
+
     return (
         <>
             <section className="grid gap-4 md:grid-cols-3">
                 {columns.map((column) => (
-                    <section key={column.id}>
-                        <Card className="bg-background">
+                    <section key={column.id} className="h-full">
+                        <Card className="bg-background h-full">
                             <CardHeader>
                                 <CardTitle className="my-4">{column.title}</CardTitle>
                                 <Button onClick={() => showAddTaskDialogForColumn(column)}>
@@ -47,6 +58,7 @@ function ColumnPanel({ columns }: ColumnPanelProps) {
                     onOpenChange={setShowAddTaskFormDialog}
                     selectedColumnId={selectedColumnId}
                     selectedColumnTitle={selectedColumnTitle}
+                    onAddTask={addTaskToSelectedColumn}
                 >
                 </AddTaskFormDialog>
             }

@@ -1,8 +1,8 @@
-import type { Task } from '@/types/Task';
+import type { TaskState } from '@/types/TaskState';
 import { Card, CardTitle, CardContent, CardHeader } from './ui/card';
 
 type TaskCardProps = {
-    task: Task
+    task: TaskState
 }
 
 function TaskCard({task}: TaskCardProps) {

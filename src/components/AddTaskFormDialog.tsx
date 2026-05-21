@@ -1,10 +1,11 @@
+import { useState, type SubmitEvent } from "react"
+
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogFooter,
-    DialogDescription,
 } from "@/components/ui/dialog"
 import {
     Button,
@@ -19,35 +20,94 @@ import {
 import {
     Input
 } from "@/components/ui/input"
+import { AlertCircleIcon } from "lucide-react"
+import {
+    Alert,
+    AlertDescription,
+} from "@/components/ui/alert"
+
+import { stringLengthValidation } from "@/lib/utils"
 
 type AddTaskFormDialogProps = {
     open: boolean | undefined,
     onOpenChange: (open: boolean) => void,
-    selectedColumnId: string | null,
-    selectedColumnTitle: string | null
+    selectedColumnTitle: string | null,
+    onAddTask: (
+        taskTitle: string,
+        taskText: string,
+    ) => void
 }
 
-function AddTaskFormDialog({ open, onOpenChange, selectedColumnId, selectedColumnTitle }: AddTaskFormDialogProps) {
+function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask }: AddTaskFormDialogProps) {
+
+    const [taskTitle, setTaskTitle] = useState('');
+    const [taskText, setTaskText] = useState('');
+
+    const [validationMessages, setValidationMessages] = useState<string[]>([])
+
+    const AlertDestructive = function () {
+        if(validationMessages.length > 0) {
+            return (
+                <Alert variant="destructive" className="max-w-md">
+                    <AlertCircleIcon />
+                    <AlertDescription>
+                        {(validationMessages.map((m: string) => (
+                            <p>{m}</p>
+                        )))}
+                    </AlertDescription>
+                </Alert>
+            )
+        }
+    }
+
+    const handleSubmit = (event: SubmitEvent) => {
+        event.preventDefault()
+
+        const nextValidationMessages: string[] = []
+
+        const titleMessage = stringLengthValidation(taskTitle, 'Title', 3)
+        const textMessage = stringLengthValidation(taskText, 'Text', 3)
+
+        if (titleMessage) {
+            nextValidationMessages.push(titleMessage)
+        }
+
+        if (textMessage) {
+            nextValidationMessages.push(textMessage)
+        }
+
+        if (nextValidationMessages.length > 0) {
+            setValidationMessages(nextValidationMessages)
+            return;
+        }
+
+        onAddTask(taskTitle, taskText)
+        onOpenChange(false)
+    }
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Add task to the {selectedColumnTitle} column</DialogTitle>
                 </DialogHeader>
-                <FieldGroup>
-                    <Field>
-                    <Label htmlFor="title-1">Title</Label>
-                    <Input id="title-1" name="title" />
-                    </Field>
-                    <Field>
-                    <Label htmlFor="text-1">Text</Label>
-                    <Input id="text-1" name="text" />
-                    </Field>
-                </FieldGroup>
-                <DialogFooter>
-                    <Button>Add Task</Button>
-                    <Button variant="destructive" onClick={(() => onOpenChange(false))}>Cancel</Button>
-                </DialogFooter>
+                <form onSubmit={handleSubmit}>
+                    <FieldGroup className="pb-4">
+                        <Field>
+                            <Label htmlFor="title-1">Title</Label>
+                            <Input id="title-1" name="title" onChange={(e) => setTaskTitle(e.target.value)} />
+                        </Field>
+                        <Field>
+                            <Label htmlFor="text-1">Text</Label>
+                            <Input id="text-1" name="text" onChange={(e) => setTaskText(e.target.value)} />
+                        </Field>
+                        <AlertDestructive></AlertDestructive>
+                    </FieldGroup>
+                    <DialogFooter>
+                        <Button type="submit">Add Task</Button>
+                        <Button type="button" variant="destructive" onClick={(() => onOpenChange(false))}>Cancel</Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     )
