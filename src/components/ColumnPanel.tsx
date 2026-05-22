@@ -6,13 +6,15 @@ import AddTaskFormDialog from './AddTaskFormDialog';
 
 import type { AddTaskHandler } from '@/types/AddTaskHandler';
 import type { Column } from '@/types/ColumnState'
+import type { DeleteTaskHandler } from '@/types/DeleteTaskHandler';
 
 type ColumnPanelProps = {
     columns: Column[],
     addTask: AddTaskHandler,
+    deleteTask: DeleteTaskHandler,
 }
 
-function ColumnPanel({ columns, addTask }: ColumnPanelProps) {
+function ColumnPanel({ columns, addTask, deleteTask }: ColumnPanelProps) {
 
     const [showAddTaskFormDialog, setShowAddTaskFormDialog] = useState(false);
     const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null)
@@ -46,7 +48,11 @@ function ColumnPanel({ columns, addTask }: ColumnPanelProps) {
                             </CardHeader>
                             <CardContent className="space-y-3">
                                 {column.tasks.map((task) => (
-                                    <TaskCard key={task.id} task={task} />
+                                    <TaskCard
+                                        key={task.id}
+                                        task={task}
+                                        deleteTask={(taskId) => deleteTask(column.id, taskId)}
+                                    />
                                 ))}
                             </CardContent>
                         </Card>

@@ -3,24 +3,29 @@ import sampleData from "@/data/kanban.json"
 import BoardPanel from "@/components/BoardPanel"
 import type { BoardState } from "@/types/BoardState"
 import type { AddTaskHandler } from "@/types/AddTaskHandler"
+import type { DeleteTaskHandler } from "./types/DeleteTaskHandler"
 
 const boardStorageKey = "kanban-board"
 
-function App() { 
+function App() {
   const [boardData, setBoardData] = useState<BoardState>(() => {
-  const savedBoard = localStorage.getItem(boardStorageKey)
+    const savedBoard = localStorage.getItem(boardStorageKey)
 
-  if (savedBoard) {
-    return JSON.parse(savedBoard)
-  }
+    if (savedBoard) {
+      return JSON.parse(savedBoard)
+    }
 
-  return sampleData
-})
+    return sampleData
+  })
 
 
   useEffect(() => {
     localStorage.setItem(boardStorageKey, JSON.stringify(boardData))
   }, [boardData])
+
+  const resetBoard = () => {
+    setBoardData(sampleData);
+  }
 
   const addTask: AddTaskHandler = (columnId, taskTitle, taskText) => {
     setBoardData((currentBoardData) => ({
@@ -46,9 +51,25 @@ function App() {
     }))
   }
 
+  const deleteTask: DeleteTaskHandler = (columnId, taskId) => {
+    setBoardData((currentBoardData) => ({
+      ...currentBoardData,
+      columns: currentBoardData.columns.map((column) => {
+          if (column.id !== columnId) {
+            return column
+          }
+
+          return {
+            ...column,
+            tasks: column.tasks.filter((task) => task.id !== taskId),
+          }
+        })
+      }))
+  }
+
   return (
     <main className="min-h-svh bg-muted/30 p-6 text-foreground h-full">
-      <BoardPanel data={boardData} addTask={addTask} />
+      <BoardPanel data={boardData} addTask={addTask} deleteTask={deleteTask} resetBoard={resetBoard} />
     </main>
   )
 }
