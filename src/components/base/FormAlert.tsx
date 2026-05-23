@@ -12,7 +12,7 @@ type AddTaskFormDialogProps = {
     variant?: "default" | "destructive"
 }
 
-function FormAlert({validationMessages, variant = "destructive"}: AddTaskFormDialogProps) {
+function FormAlert({ validationMessages, variant = "destructive" }: AddTaskFormDialogProps) {
     if (validationMessages.length > 0) {
         return (
             <>

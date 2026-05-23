@@ -85,7 +85,7 @@ function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask 
                             <Label htmlFor="text-1">Text</Label>
                             <Input id="text-1" name="text" onChange={(e) => setTaskText(e.target.value)} />
                         </Field>
-                        <FormAlert validationMessages={validationMessages}/>
+                        <FormAlert validationMessages={validationMessages} />
                     </FieldGroup>
                     <DialogFooter>
                         <Button type="submit">Add Task</Button>

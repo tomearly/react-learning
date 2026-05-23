@@ -16,7 +16,6 @@ function App() {
     loadBoardData(boardStorageKey, initialBoardData)
   )
 
-
   useEffect(() => {
     saveBoardData(boardStorageKey, boardData)
   }, [boardData])
@@ -54,16 +53,16 @@ function App() {
     setBoardData((currentBoardData) => ({
       ...currentBoardData,
       columns: currentBoardData.columns.map((column) => {
-          if (column.id !== columnId) {
-            return column
-          }
+        if (column.id !== columnId) {
+          return column
+        }
 
-          return {
-            ...column,
-            tasks: column.tasks.filter((task) => task.id !== taskId),
-          }
-        })
-      }))
+        return {
+          ...column,
+          tasks: column.tasks.filter((task) => task.id !== taskId),
+        }
+      })
+    }))
   }
 
   const moveToColumn: MoveToHandler = (taskId, columnStatus) => {
