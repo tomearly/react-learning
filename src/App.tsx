@@ -6,6 +6,8 @@ import type { AddTaskHandler } from "@/types/AddTaskHandler"
 import type { DeleteTaskHandler } from "./types/DeleteTaskHandler"
 import type { MoveToHandler } from "./types/MoveToHandler"
 
+const initialBoardData = sampleData as BoardState
+
 const boardStorageKey = "kanban-board"
 
 function App() {
@@ -25,7 +27,7 @@ function App() {
   }, [boardData])
 
   const resetBoard = () => {
-    setBoardData(sampleData);
+    setBoardData(initialBoardData);
   }
 
   const addTask: AddTaskHandler = (columnId, taskTitle, taskText) => {

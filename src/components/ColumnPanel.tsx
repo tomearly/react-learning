@@ -55,6 +55,7 @@ function ColumnPanel({ columns, addTask, deleteTask, moveToColumn }: ColumnPanel
                                         task={task}
                                         deleteTask={(taskId) => deleteTask(column.id, taskId)}
                                         moveToColumn={(taskId, columnStatus) => moveToColumn(taskId, columnStatus)}
+                                        columnStatus={column.status}
                                     />
                                 ))}
                             </CardContent>
