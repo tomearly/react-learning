@@ -7,14 +7,16 @@ import AddTaskFormDialog from './AddTaskFormDialog';
 import type { AddTaskHandler } from '@/types/AddTaskHandler';
 import type { Column } from '@/types/ColumnState'
 import type { DeleteTaskHandler } from '@/types/DeleteTaskHandler';
+import type { MoveToHandler } from '@/types/MoveToHandler';
 
 type ColumnPanelProps = {
     columns: Column[],
     addTask: AddTaskHandler,
     deleteTask: DeleteTaskHandler,
+    moveToColumn: MoveToHandler,
 }
 
-function ColumnPanel({ columns, addTask, deleteTask }: ColumnPanelProps) {
+function ColumnPanel({ columns, addTask, deleteTask, moveToColumn }: ColumnPanelProps) {
 
     const [showAddTaskFormDialog, setShowAddTaskFormDialog] = useState(false);
     const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null)
@@ -52,6 +54,7 @@ function ColumnPanel({ columns, addTask, deleteTask }: ColumnPanelProps) {
                                         key={task.id}
                                         task={task}
                                         deleteTask={(taskId) => deleteTask(column.id, taskId)}
+                                        moveToColumn={(taskId, columnStatus) => moveToColumn(taskId, columnStatus)}
                                     />
                                 ))}
                             </CardContent>

@@ -8,7 +8,8 @@
             "title": "TODO",
             "tasks": [
                
-            ]
+            ],
+            "status": "todo"
         },
         {
             "id": "column_2",
@@ -16,7 +17,8 @@
             "title": "DONE",
             "tasks": [
              
-            ]
+            ],
+            "status": "done"
         },
         {
             "id": "column_3",
@@ -24,7 +26,8 @@
             "title": "IN PROGRESS",
             "tasks": [
             
-            ]
+            ],
+            "status": "in_progress"
         }
     ]
 }

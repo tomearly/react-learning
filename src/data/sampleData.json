@@ -6,6 +6,7 @@
             "id": "column_1",
             "position": 0,
             "title": "TODO",
+            "status": "todo",
             "tasks": [
                 {
                     "id": "column_1_2",
@@ -27,6 +28,7 @@
             "id": "column_2",
             "position": 2,
             "title": "DONE",
+            "status": "done",
             "tasks": [
                 {
                     "id": "column_3_1",
@@ -40,7 +42,6 @@
                     "position": 0,
                     "title": "Feed the cat",
                     "text": "Give the cat some kibble",
-                    "status": "DOING"
                 }
             ]
         },
@@ -48,20 +49,19 @@
             "id": "column_3",
             "position": 1,
             "title": "IN PROGRESS",
+            "status": "in_progress",
             "tasks": [
                 {
                     "id": "column_3_1",
                     "position": 1,
                     "title": "Clean litter tray",
-                    "text": "Clean up the litter tray and put new water out",
-                    "status": "DOING"
+                    "text": "Clean up the litter tray and put new water out"
                 },
                 {
                     "id": "column_3_0",
                     "position": 0,
                     "title": "Feed the cat",
-                    "text": "Give the cat some kibble",
-                    "status": "DOING"
+                    "text": "Give the cat some kibble"
                 }
             ]
         }

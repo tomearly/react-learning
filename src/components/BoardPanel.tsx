@@ -4,16 +4,18 @@ import type { DeleteTaskHandler } from '@/types/DeleteTaskHandler'
 import ColumnPanel from './ColumnPanel'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button';
+import type { MoveToHandler } from '@/types/MoveToHandler'
 
 type BoardPanelProps = {
     data: BoardState,
     resetBoard: () => void,
     addTask: AddTaskHandler,
     deleteTask: DeleteTaskHandler,
+    moveToColumn: MoveToHandler,
 }
 
-function BoardPanel({ data, addTask, resetBoard, deleteTask }: BoardPanelProps) {
-    const columns = data.columns
+function BoardPanel({ data, addTask, resetBoard, deleteTask, moveToColumn }: BoardPanelProps) {
+    const columns = data.columns.sort((a,b) => a.position - b.position);
 
     return (
         <Card className="mx-auto max-w-6xl h-full">
@@ -22,7 +24,7 @@ function BoardPanel({ data, addTask, resetBoard, deleteTask }: BoardPanelProps) 
                 <Button onClick={resetBoard} variant="destructive">Reset Board</Button>
             </CardHeader>
             <CardContent>
-                <ColumnPanel columns={columns} addTask={addTask} deleteTask={deleteTask} />
+                <ColumnPanel columns={columns} addTask={addTask} deleteTask={deleteTask} moveToColumn={moveToColumn}/>
             </CardContent>
         </Card>
     )

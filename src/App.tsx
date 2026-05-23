@@ -4,6 +4,7 @@ import BoardPanel from "@/components/BoardPanel"
 import type { BoardState } from "@/types/BoardState"
 import type { AddTaskHandler } from "@/types/AddTaskHandler"
 import type { DeleteTaskHandler } from "./types/DeleteTaskHandler"
+import type { MoveToHandler } from "./types/MoveToHandler"
 
 const boardStorageKey = "kanban-board"
 
@@ -67,9 +68,51 @@ function App() {
       }))
   }
 
+  const moveToColumn: MoveToHandler = (taskId, columnStatus) => {
+    console.log(taskId)
+    setBoardData((currentBoardData) => {
+      const taskToMove = currentBoardData.columns
+        .flatMap((column) => column.tasks)
+        .find((task) => task.id === taskId)
+
+      if (!taskToMove) {
+        throw new Error(`Cannot move task because task "${taskId}" was not found.`)
+      }
+
+      const targetColumn = currentBoardData.columns.find((column) => column.status === columnStatus)
+
+      if (!targetColumn) {
+        throw new Error(`Cannot move task because column "${columnStatus}" was not found.`)
+      }
+
+      return {
+        ...currentBoardData,
+        columns: currentBoardData.columns.map((column) => {
+          if (column.id === targetColumn.id) {
+            return {
+              ...column,
+              tasks: [
+                ...column.tasks.filter((task) => task.id !== taskId),
+                {
+                  ...taskToMove,
+                  position: column.tasks.length,
+                },
+              ],
+            }
+          }
+
+          return {
+            ...column,
+            tasks: column.tasks.filter((task) => task.id !== taskId),
+          }
+        }),
+      }
+    })
+  }
+
   return (
     <main className="min-h-svh bg-muted/30 p-6 text-foreground h-full">
-      <BoardPanel data={boardData} addTask={addTask} deleteTask={deleteTask} resetBoard={resetBoard} />
+      <BoardPanel data={boardData} addTask={addTask} deleteTask={deleteTask} moveToColumn={moveToColumn} resetBoard={resetBoard} />
     </main>
   )
 }
