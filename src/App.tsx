@@ -5,29 +5,25 @@ import type { BoardState } from "@/types/BoardState"
 import type { AddTaskHandler } from "@/types/AddTaskHandler"
 import type { DeleteTaskHandler } from "./types/DeleteTaskHandler"
 import type { MoveToHandler } from "./types/MoveToHandler"
+import { saveBoardData, loadBoardData, clearBoardData } from "@/lib/boardStorage"
 
 const initialBoardData = sampleData as BoardState
 
 const boardStorageKey = "kanban-board"
 
 function App() {
-  const [boardData, setBoardData] = useState<BoardState>(() => {
-    const savedBoard = localStorage.getItem(boardStorageKey)
-
-    if (savedBoard) {
-      return JSON.parse(savedBoard)
-    }
-
-    return sampleData
-  })
+  const [boardData, setBoardData] = useState<BoardState>(() =>
+    loadBoardData(boardStorageKey, initialBoardData)
+  )
 
 
   useEffect(() => {
-    localStorage.setItem(boardStorageKey, JSON.stringify(boardData))
+    saveBoardData(boardStorageKey, boardData)
   }, [boardData])
 
   const resetBoard = () => {
-    setBoardData(initialBoardData);
+    clearBoardData(boardStorageKey)
+    setBoardData(initialBoardData)
   }
 
   const addTask: AddTaskHandler = (columnId, taskTitle, taskText) => {
