@@ -4,25 +4,45 @@ import { Button } from './ui/button';
 import type { ColumnStatus } from '@/types/ColumnStatus';
 import { validateTaskMove } from '@/lib/utils';
 
+const moveTargets: { status: ColumnStatus, label: string }[] = [
+    { status: 'todo', label: 'Todo' },
+    { status: 'in_progress', label: 'In progress' },
+    { status: 'done', label: 'Done' },
+]
+
 type TaskCardProps = {
     task: TaskState,
     deleteTask: (id: string) => void,
-    moveToColumn: (id: string, collumnStatus: ColumnStatus) => void,
+    moveToColumn: (id: string, columnStatus: ColumnStatus) => void,
     columnStatus: ColumnStatus
 }
 
 function TaskCard({task, deleteTask, moveToColumn, columnStatus}: TaskCardProps) {
     return (
-        <Card className="p-4">
-            <CardHeader className="p-0 flex justify-between">
+        <Card className="gap-3 p-4">
+            <CardHeader className="flex-row items-start justify-between gap-3 p-0">
                 <CardTitle>{task.title}</CardTitle>
-                <Button onClick={() => deleteTask(task.id)}>Delete Task</Button>
-                { validateTaskMove(columnStatus, 'todo') && <Button onClick={() => moveToColumn(task.id, 'todo')}>Move to todo</Button>}
-                { validateTaskMove(columnStatus, 'in_progress') && <Button onClick={() => moveToColumn(task.id, 'in_progress')}>Move to in progress</Button>}
-                { validateTaskMove(columnStatus, 'done') && <Button onClick={() => moveToColumn(task.id, 'done')}>Move to done</Button>}
+                <Button variant="destructive" size="sm" onClick={() => deleteTask(task.id)}>
+                    Delete
+                </Button>
             </CardHeader>
-            <CardContent className='p-0'>
-                {task.text}
+            <CardContent className="space-y-3 p-0">
+                <p className="text-sm text-muted-foreground">{task.text}</p>
+                <div className="flex flex-wrap gap-2">
+                    {moveTargets
+                        .filter((target) => validateTaskMove(columnStatus, target.status))
+                        .map((target) => (
+                            <Button
+                                key={target.status}
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => moveToColumn(task.id, target.status)}
+                            >
+                                Move to {target.label}
+                            </Button>
+                        ))}
+                </div>
             </CardContent>
         </Card>
     )
