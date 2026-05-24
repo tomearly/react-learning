@@ -5,6 +5,7 @@ import type { BoardState } from "@/types/BoardState"
 import type { AddTaskHandler } from "@/types/AddTaskHandler"
 import type { DeleteTaskHandler } from "./types/DeleteTaskHandler"
 import type { MoveToHandler } from "./types/MoveToHandler"
+import type { EditTaskHandler } from "./types/EditTaskHandler"
 import { saveBoardData, loadBoardData, clearBoardData } from "@/lib/boardStorage"
 
 const initialBoardData = sampleData as BoardState
@@ -66,7 +67,6 @@ function App() {
   }
 
   const moveToColumn: MoveToHandler = (taskId, columnStatus) => {
-    console.log(taskId)
     setBoardData((currentBoardData) => {
       const taskToMove = currentBoardData.columns
         .flatMap((column) => column.tasks)
@@ -107,9 +107,41 @@ function App() {
     })
   }
 
+  const editTask: EditTaskHandler = (columnId, taskId, taskTitle, taskText) => {
+    setBoardData((currentBoardData) => ({
+      ...currentBoardData,
+      columns: currentBoardData.columns.map((column) => {
+        if (column.id !== columnId) {
+          return column
+        }
+
+        const taskExists = column.tasks.some((task) => task.id === taskId)
+
+        if (!taskExists) {
+          throw new Error(`Cannot edit task because task "${taskId}" was not found.`)
+        }
+
+        return {
+          ...column,
+          tasks: column.tasks.map((task) => {
+            if (task.id !== taskId) {
+              return task
+            }
+
+            return {
+              ...task,
+              title: taskTitle,
+              text: taskText,
+            }
+          }),
+        }
+      }),
+    }))
+  }
+
   return (
     <main className="min-h-svh bg-muted/30 p-6 text-foreground h-full">
-      <BoardPanel data={boardData} addTask={addTask} deleteTask={deleteTask} moveToColumn={moveToColumn} resetBoard={resetBoard} />
+      <BoardPanel data={boardData} addTask={addTask} deleteTask={deleteTask} moveToColumn={moveToColumn} resetBoard={resetBoard} editTask={editTask}/>
     </main>
   )
 }

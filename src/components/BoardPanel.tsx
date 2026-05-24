@@ -5,6 +5,7 @@ import ColumnPanel from './ColumnPanel'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button';
 import type { MoveToHandler } from '@/types/MoveToHandler'
+import type { EditTaskHandler } from '@/types/EditTaskHandler'
 
 type BoardPanelProps = {
     data: BoardState,
@@ -12,9 +13,10 @@ type BoardPanelProps = {
     addTask: AddTaskHandler,
     deleteTask: DeleteTaskHandler,
     moveToColumn: MoveToHandler,
+    editTask: EditTaskHandler
 }
 
-function BoardPanel({ data, addTask, resetBoard, deleteTask, moveToColumn }: BoardPanelProps) {
+function BoardPanel({ data, addTask, resetBoard, deleteTask, moveToColumn, editTask }: BoardPanelProps) {
     const columns = data.columns.sort((a,b) => a.position - b.position);
 
     return (
@@ -24,7 +26,7 @@ function BoardPanel({ data, addTask, resetBoard, deleteTask, moveToColumn }: Boa
                 <Button onClick={resetBoard} variant="destructive">Reset Board</Button>
             </CardHeader>
             <CardContent>
-                <ColumnPanel columns={columns} addTask={addTask} deleteTask={deleteTask} moveToColumn={moveToColumn}/>
+                <ColumnPanel columns={columns} addTask={addTask} deleteTask={deleteTask} moveToColumn={moveToColumn} editTask={editTask}/>
             </CardContent>
         </Card>
     )

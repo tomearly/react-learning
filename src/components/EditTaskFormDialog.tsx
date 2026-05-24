@@ -25,25 +25,26 @@ import FormAlert from "@/components/base/FormAlert"
 
 import { stringLengthValidation } from "@/lib/utils"
 
-type AddTaskFormDialogProps = {
+type EditTaskFormDialogProps = {
     open: boolean | undefined,
     onOpenChange: (open: boolean) => void,
-    selectedColumnTitle: string | null,
-    onAddTask: (
+    initialTaskTitle: string,
+    initialTaskText: string,
+    onEditTask: (
         taskTitle: string,
         taskText: string,
     ) => void
 }
 
 
-function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask }: AddTaskFormDialogProps) {
+function EditTaskFormDialog({ open, onOpenChange, initialTaskTitle, initialTaskText, onEditTask }: EditTaskFormDialogProps) {
 
-    const [taskTitle, setTaskTitle] = useState('');
-    const [taskText, setTaskText] = useState('');
+    const [taskTitle, setTaskTitle] = useState(initialTaskTitle);
+    const [taskText, setTaskText] = useState(initialTaskText);
 
     const resetForm = () => {
-        setTaskTitle('')
-        setTaskText('')
+        setTaskTitle(initialTaskTitle)
+        setTaskText(initialTaskText)
         setValidationMessages([])
     }
 
@@ -72,7 +73,7 @@ function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask 
 
         setValidationMessages([])
 
-        onAddTask(taskTitle, taskText)
+        onEditTask(taskTitle, taskText)
         resetForm()
         onOpenChange(false)
     }
@@ -81,7 +82,7 @@ function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask 
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Add task to the {selectedColumnTitle} column</DialogTitle>
+                    <DialogTitle>Edit task</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                     <FieldGroup className="pb-4">
@@ -96,7 +97,7 @@ function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask 
                         <FormAlert validationMessages={validationMessages} />
                     </FieldGroup>
                     <DialogFooter>
-                        <Button type="submit">Add Task</Button>
+                        <Button type="submit">Save Task</Button>
                         <Button type="button" variant="destructive" onClick={(() => {resetForm(); onOpenChange(false) })}>Cancel</Button>
                     </DialogFooter>
                 </form>
@@ -105,4 +106,4 @@ function AddTaskFormDialog({ open, onOpenChange, selectedColumnTitle, onAddTask 
     )
 }
 
-export default AddTaskFormDialog;
+export default EditTaskFormDialog;

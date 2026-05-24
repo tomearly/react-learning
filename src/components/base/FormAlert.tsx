@@ -7,12 +7,12 @@ import {
     Item,
 } from "@/components/ui/item"
 
-type AddTaskFormDialogProps = {
+type FormAlertProps = {
     validationMessages: string[],
     variant?: "default" | "destructive"
 }
 
-function FormAlert({ validationMessages, variant = "destructive" }: AddTaskFormDialogProps) {
+function FormAlert({ validationMessages, variant = "destructive" }: FormAlertProps) {
     if (validationMessages.length > 0) {
         return (
             <>
