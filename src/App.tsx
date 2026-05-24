@@ -7,6 +7,7 @@ import type { DeleteTaskHandler } from "./types/DeleteTaskHandler"
 import type { MoveToHandler } from "./types/MoveToHandler"
 import type { EditTaskHandler } from "./types/EditTaskHandler"
 import { saveBoardData, loadBoardData, clearBoardData } from "@/lib/boardStorage"
+import { addTaskToBoard, deleteTaskFromBoard, editTaskInBoard, moveTaskInBoard } from "./lib/utils"
 
 const initialBoardData = sampleData as BoardState
 
@@ -27,116 +28,19 @@ function App() {
   }
 
   const addTask: AddTaskHandler = (columnId, taskTitle, taskText) => {
-    setBoardData((currentBoardData) => ({
-      ...currentBoardData,
-      columns: currentBoardData.columns.map((column) => {
-        if (column.id !== columnId) {
-          return column
-        }
-
-        return {
-          ...column,
-          tasks: [
-            ...column.tasks,
-            {
-              id: crypto.randomUUID(),
-              position: column.tasks.length,
-              title: taskTitle,
-              text: taskText,
-            },
-          ],
-        }
-      }),
-    }))
+    setBoardData((boardData) => addTaskToBoard(boardData, columnId, taskTitle, taskText))
   }
 
   const deleteTask: DeleteTaskHandler = (columnId, taskId) => {
-    setBoardData((currentBoardData) => ({
-      ...currentBoardData,
-      columns: currentBoardData.columns.map((column) => {
-        if (column.id !== columnId) {
-          return column
-        }
-
-        return {
-          ...column,
-          tasks: column.tasks.filter((task) => task.id !== taskId),
-        }
-      })
-    }))
+    setBoardData((boardData) => deleteTaskFromBoard(boardData, columnId, taskId))
   }
 
   const moveToColumn: MoveToHandler = (taskId, columnStatus) => {
-    setBoardData((currentBoardData) => {
-      const taskToMove = currentBoardData.columns
-        .flatMap((column) => column.tasks)
-        .find((task) => task.id === taskId)
-
-      if (!taskToMove) {
-        throw new Error(`Cannot move task because task "${taskId}" was not found.`)
-      }
-
-      const targetColumn = currentBoardData.columns.find((column) => column.status === columnStatus)
-
-      if (!targetColumn) {
-        throw new Error(`Cannot move task because column "${columnStatus}" was not found.`)
-      }
-
-      return {
-        ...currentBoardData,
-        columns: currentBoardData.columns.map((column) => {
-          if (column.id === targetColumn.id) {
-            return {
-              ...column,
-              tasks: [
-                ...column.tasks.filter((task) => task.id !== taskId),
-                {
-                  ...taskToMove,
-                  position: column.tasks.length,
-                },
-              ],
-            }
-          }
-
-          return {
-            ...column,
-            tasks: column.tasks.filter((task) => task.id !== taskId),
-          }
-        }),
-      }
-    })
+    setBoardData((boardData) => moveTaskInBoard(boardData, taskId, columnStatus))
   }
 
   const editTask: EditTaskHandler = (columnId, taskId, taskTitle, taskText) => {
-    setBoardData((currentBoardData) => ({
-      ...currentBoardData,
-      columns: currentBoardData.columns.map((column) => {
-        if (column.id !== columnId) {
-          return column
-        }
-
-        const taskExists = column.tasks.some((task) => task.id === taskId)
-
-        if (!taskExists) {
-          throw new Error(`Cannot edit task because task "${taskId}" was not found.`)
-        }
-
-        return {
-          ...column,
-          tasks: column.tasks.map((task) => {
-            if (task.id !== taskId) {
-              return task
-            }
-
-            return {
-              ...task,
-              title: taskTitle,
-              text: taskText,
-            }
-          }),
-        }
-      }),
-    }))
+    setBoardData((boardData) => editTaskInBoard(boardData, columnId, taskId, taskTitle, taskText))
   }
 
   return (

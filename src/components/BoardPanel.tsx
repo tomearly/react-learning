@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import type { BoardState } from '@/types/BoardState'
 import type { AddTaskHandler } from '@/types/AddTaskHandler'
 import type { DeleteTaskHandler } from '@/types/DeleteTaskHandler'
@@ -17,7 +18,10 @@ type BoardPanelProps = {
 }
 
 function BoardPanel({ data, addTask, resetBoard, deleteTask, moveToColumn, editTask }: BoardPanelProps) {
-    const columns = data.columns.sort((a,b) => a.position - b.position);
+    const columns = useMemo(
+        () => [...data.columns].sort((a, b) => a.position - b.position),
+        [data.columns]
+    )
 
     return (
         <Card className="mx-auto max-w-6xl h-full">
