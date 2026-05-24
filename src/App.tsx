@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import sampleData from "@/data/kanban.json"
 import BoardPanel from "@/components/BoardPanel"
 import type { BoardState } from "@/types/BoardState"
 import type { AddTaskHandler } from "@/types/AddTaskHandler"
 import type { DeleteTaskHandler } from "./types/DeleteTaskHandler"
-import type { MoveToHandler } from "./types/MoveToHandler"
 import type { EditTaskHandler } from "./types/EditTaskHandler"
+import type { MoveToHandler } from "./types/MoveToHandler"
 import { saveBoardData, loadBoardData, clearBoardData } from "@/lib/boardStorage"
-import { addTaskToBoard, deleteTaskFromBoard, editTaskInBoard, moveTaskInBoard } from "./lib/utils"
+import { addTaskToBoard, deleteTaskFromBoard, editTaskInBoard, moveTaskInBoard } from "./lib/boardActions"
 
 const initialBoardData = sampleData as BoardState
 
@@ -27,25 +27,30 @@ function App() {
     setBoardData(initialBoardData)
   }
 
-  const addTask: AddTaskHandler = (columnId, taskTitle, taskText) => {
-    setBoardData((boardData) => addTaskToBoard(boardData, columnId, taskTitle, taskText))
-  }
+  const addTask = useCallback<AddTaskHandler>((columnId, taskTitle, taskText) => {
+    setBoardData((boardData) => 
+      addTaskToBoard(boardData, columnId, taskTitle, taskText)
+    )
+  }, [])
 
-  const deleteTask: DeleteTaskHandler = (columnId, taskId) => {
-    setBoardData((boardData) => deleteTaskFromBoard(boardData, columnId, taskId))
-  }
+  const deleteTask = useCallback<DeleteTaskHandler>((columnId, taskId) => {
+      setBoardData((boardData) => deleteTaskFromBoard(boardData, columnId, taskId)
+    )
+  }, [])
 
-  const moveToColumn: MoveToHandler = (taskId, columnStatus) => {
-    setBoardData((boardData) => moveTaskInBoard(boardData, taskId, columnStatus))
-  }
+  const moveToColumn = useCallback<MoveToHandler>((taskId, columnStatus) => {
+      setBoardData((boardData) => moveTaskInBoard(boardData, taskId, columnStatus)
+    )
+  }, [])
 
-  const editTask: EditTaskHandler = (columnId, taskId, taskTitle, taskText) => {
-    setBoardData((boardData) => editTaskInBoard(boardData, columnId, taskId, taskTitle, taskText))
-  }
+  const editTask = useCallback<EditTaskHandler>((columnId, taskId, taskTitle, taskText) => {
+      setBoardData((boardData) => editTaskInBoard(boardData, columnId, taskId, taskTitle, taskText)
+    )
+  }, [])
 
   return (
     <main className="min-h-svh bg-muted/30 p-6 text-foreground h-full">
-      <BoardPanel data={boardData} addTask={addTask} deleteTask={deleteTask} moveToColumn={moveToColumn} resetBoard={resetBoard} editTask={editTask}/>
+      <BoardPanel data={boardData} addTask={addTask} deleteTask={deleteTask} moveToColumn={moveToColumn} resetBoard={resetBoard} editTask={editTask} />
     </main>
   )
 }
