@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { TaskState } from '@/types/TaskState';
 import { Card, CardTitle, CardContent, CardHeader } from './ui/card';
 import { Button } from './ui/button';
@@ -57,4 +58,4 @@ function TaskCard({task, deleteTask, moveToColumn, columnStatus, editTask}: Task
     )
 }
 
-export default TaskCard;
+export default memo(TaskCard);
