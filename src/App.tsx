@@ -7,7 +7,7 @@ import type { DeleteTaskHandler } from "./types/DeleteTaskHandler"
 import type { EditTaskHandler } from "./types/EditTaskHandler"
 import type { MoveToHandler } from "./types/MoveToHandler"
 import { saveBoardData, loadBoardData, clearBoardData } from "@/lib/boardStorage"
-import { addTaskToBoard, deleteTaskFromBoard, editTaskInBoard, moveTaskInBoard } from "./lib/boardActions"
+import { addTaskToBoard, deleteTaskFromBoard, editTaskInBoard, moveTaskInBoard } from "@/lib/boardActions"
 
 const initialBoardData = sampleData as BoardState
 
@@ -22,10 +22,10 @@ function App() {
     saveBoardData(boardStorageKey, boardData)
   }, [boardData])
 
-  const resetBoard = () => {
+  const resetBoard = useCallback(() => {
     clearBoardData(boardStorageKey)
     setBoardData(initialBoardData)
-  }
+  }, [])
 
   const addTask = useCallback<AddTaskHandler>((columnId, taskTitle, taskText) => {
     setBoardData((boardData) => 

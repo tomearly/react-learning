@@ -1,7 +1,7 @@
 import type { BoardState } from "@/types/BoardState"
 import type { ColumnStatus } from "@/types/ColumnStatus"
 
-export function addTaskToBoard(board: BoardState, columnId: string, title: string, text: string) {
+export function addTaskToBoard(board: BoardState, columnId: string, title: string, text: string): BoardState {
   return ({
     ...board,
     columns: board.columns.map((column) => {
@@ -25,7 +25,7 @@ export function addTaskToBoard(board: BoardState, columnId: string, title: strin
   })
 }
 
-export function deleteTaskFromBoard(board: BoardState, columnId: string, taskId: string) {
+export function deleteTaskFromBoard(board: BoardState, columnId: string, taskId: string): BoardState {
   return ({
     ...board,
     columns: board.columns.map((column) => {
@@ -41,7 +41,7 @@ export function deleteTaskFromBoard(board: BoardState, columnId: string, taskId:
   })
 }
 
-export function moveTaskInBoard(board: BoardState, taskId: string, targetStatus: ColumnStatus) {
+export function moveTaskInBoard(board: BoardState, taskId: string, targetStatus: ColumnStatus): BoardState {
   {
     const taskToMove = board.columns
       .flatMap((column) => column.tasks)
@@ -82,7 +82,7 @@ export function moveTaskInBoard(board: BoardState, taskId: string, targetStatus:
   }
 }
 
-export function editTaskInBoard(board: BoardState, columnId: string, taskId: string, title: string, text: string) {
+export function editTaskInBoard(board: BoardState, columnId: string, taskId: string, title: string, text: string): BoardState {
 
   return ({
     ...board,
